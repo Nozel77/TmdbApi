@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +15,7 @@
         android:theme="@style/Theme.TmdbApi"
         tools:targetApi="31">
         <activity
-            android:name=".ListMovieActvity"
+            android:name=".ListMovieActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
