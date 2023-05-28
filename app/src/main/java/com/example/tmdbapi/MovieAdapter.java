@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -21,14 +20,14 @@ public class MovieAdapter extends RecyclerView.Adapter {
     private MovieAdapterListener listener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
-        public TextView tvname, tvtahun, tvgenre;
+        public TextView tvname, tvtahun, tvdate;
         public ImageView ivMoviePoster;
 
         public MyViewHolder(View view){
             super(view);
             tvname = view.findViewById(R.id.tvname);
             tvtahun = view.findViewById(R.id.tvtahun);
-            tvgenre = view.findViewById(R.id.tvgenre);
+            tvdate = view.findViewById(R.id.tvgenre);
             ivMoviePoster = view.findViewById(R.id.ivMoviePoster);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -36,6 +35,25 @@ public class MovieAdapter extends RecyclerView.Adapter {
                     listener.onContactSelected(movieList.get(getAdapterPosition()));
                 }
             });
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if (listener != null){
+                        int pos = getAdapterPosition();
+
+                        if (pos != RecyclerView.NO_POSITION){
+                            listener.onItemLongClick(pos);
+                        }
+                    }
+
+
+
+
+                    return true;
+                }
+
+            });
+
         }
     }
 
@@ -55,13 +73,18 @@ public MovieAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewTy
         MyViewHolder myViewHolder = (MyViewHolder) holder;
         final MovieModel movie = this.movieList.get(position);
         myViewHolder.tvname.setText(movie.getMovieName());
-        myViewHolder.tvgenre.setText(movie.getOverview());
-        Picasso.get().load("https://image.tmdb.org/t/p/w500" +movie.getPosterPath()).into(myViewHolder.ivMoviePoster);
+        myViewHolder.tvdate.setText(movie.getReleaseDate());
+        Picasso.get().
+                load("https://image.tmdb.org/t/p/w500" +movie.getPosterPath())
+                .placeholder(R.drawable.ic_launcher_background).
+        into(myViewHolder.ivMoviePoster);
 
     }
 
 public int getItemCount(){return this.movieList.size();}
     public interface MovieAdapterListener {
         void onContactSelected(MovieModel contact);
+        void onItemLongClick(int position);
+
     }
 }

@@ -15,6 +15,9 @@
         android:theme="@style/Theme.TmdbApi"
         tools:targetApi="31">
         <activity
+            android:name=".DetailMoviePage"
+            android:exported="false" />
+        <activity
             android:name=".ListMovieActivity"
             android:exported="false" />
         <activity
