@@ -1,10 +1,14 @@
 package com.example.tmdbapi;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,12 +48,14 @@ public class ListMovieActivity extends AppCompatActivity implements MovieAdapter
                         try {
                             JSONArray jsonArrayMovie = jsonObject.getJSONArray("results");
                             for (int i = 0; i <jsonArrayMovie.length() ; i++) {
-                                MovieModel myTeam = new MovieModel();
+                                MovieModel myMovie = new MovieModel();
                                 JSONObject jsonMovie = jsonArrayMovie.getJSONObject(i);
-                                myTeam.setMovieName(jsonMovie.getString("original_title"));
-                                myTeam.setOverview(jsonMovie.getString("release_datex"));
-                                myTeam.setPosterPath(jsonMovie.getString("poster_path"));
-                                listDataMovie.add(myTeam);
+                                myMovie.setMovieName(jsonMovie.getString("original_title"));
+                                myMovie.setOverview(jsonMovie.getString("overview"));
+                                myMovie.setReleaseDate(jsonMovie.getString("release_date"));
+                                myMovie.setBackdropPath(jsonMovie.getString("backdrop_path"));
+                                myMovie.setPosterPath(jsonMovie.getString("poster_path"));
+                                listDataMovie.add(myMovie);
                             }
 
                             rvMovieName = findViewById(R.id.rvMovieName);
@@ -96,7 +102,33 @@ public class ListMovieActivity extends AppCompatActivity implements MovieAdapter
     }
 
     @Override
-    public void onContactSelected(MovieModel contact) {
+    public void onContactSelected(MovieModel myMovie) {
+        Intent intent = new Intent(ListMovieActivity.this,DetailMoviePage.class);
+        intent.putExtra("myMovie",myMovie);
+        startActivity(intent);
+    }
 
+    @Override
+    public void onItemLongClick(int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ListMovieActivity.this);
+        builder.setTitle("Perhatian!")
+                .setMessage("Apakah kamu yakin ingin menghapus item ini?")
+                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Tindakan yang dilakukan ketika tombol OK diklik
+                        listDataMovie.remove(position);
+                        adapterMovie.notifyItemRemoved(position);
+                        Toast.makeText(ListMovieActivity.this.getApplicationContext(), "Deleted", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Tindakan yang dilakukan ketika tombol Batal diklik
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }
+
