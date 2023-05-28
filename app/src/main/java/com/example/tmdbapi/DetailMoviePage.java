@@ -33,6 +33,6 @@ public class DetailMoviePage extends AppCompatActivity {
         tvMovieName.setText(movieModel.getMovieName());
         tvOverview.setText(movieModel.getOverview());
         tvReleaseDate.setText(movieModel.getReleaseDate());
-        Glide.with(this).load("https://image.tmdb.org/t/p/original" + movieModel.getBackdropPath()).into(ivBackdropPath);
+        Glide.with(this).load("https://image.tmdb.org/t/p/original" + movieModel.getBackdropPath()).placeholder(R.drawable.ic_launcher_background).into(ivBackdropPath);
     }
 }
